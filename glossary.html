@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Glossary — Every Term Explained</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .glossary-hero { padding: 3.5rem 0 2.5rem; }
+    .glossary-hero h1 {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .glossary-hero h1 em { font-style: italic; color: var(--gold); }
+    .glossary-hero p { color: var(--text-secondary); font-size: 1.05rem; max-width: 560px; }
+
+    /* ── SEARCH ── */
+    .search-bar { margin: 2rem 0; position: relative; }
+    .search-bar input {
+      width: 100%;
+      padding: 0.85rem 1.2rem 0.85rem 2.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .search-bar input:focus { border-color: var(--gold-dim); }
+    .search-bar input::placeholder { color: var(--text-secondary); }
+    .search-icon {
+      position: absolute; left: 1rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary); font-size: 1rem;
+    }
+
+    /* ── CATEGORY TABS ── */
+    .cat-tabs { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .cat-tab {
+      padding: 0.35rem 0.9rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .cat-tab:hover { border-color: var(--border-hover); color: var(--text); }
+    .cat-tab.active { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+    /* ── GAME FLOW ── */
+    .flow-section { margin-bottom: 4rem; }
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .flow-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .flow-step::before {
+      content: attr(data-step);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .flow-step h4 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.05rem;
+      margin: 0.4rem 0;
+      font-weight: 700;
+    }
+    .flow-step p { color: var(--text-secondary); font-size: 0.85rem; }
+
+    /* ── TERMS ── */
+    .terms-section { margin-bottom: 3rem; }
+    .terms-section h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.35rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+    }
+    .term-card {
+      padding: 1.1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .term-card:last-child { border-bottom: none; }
+    .term-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 0.3rem;
+    }
+    .term-name { font-weight: 600; font-size: 1rem; color: var(--text); }
+    .term-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0.12rem 0.45rem;
+      border-radius: 4px;
+      background: var(--gold-faint);
+      color: var(--gold);
+    }
+    .term-def { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .term-example {
+      margin-top: 0.4rem;
+      padding: 0.5rem 0.9rem;
+      background: var(--surface);
+      border-left: 2px solid var(--felt);
+      border-radius: 0 6px 6px 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    /* ── HOW TO PLAY ── */
+    .how-section {
+      margin-bottom: 4rem;
+      padding: 2.25rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+    .how-section h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    .how-section ol { padding-left: 1.5rem; color: var(--text-secondary); }
+    .how-section li { margin-bottom: 0.7rem; font-size: 0.92rem; }
+    .how-section li strong { color: var(--text); }
+
+    /* ── TIPS ── */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .tip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      transition: border-color var(--transition);
+    }
+    .tip-card:hover { border-color: var(--border-hover); }
+    .tip-card h4 {
+      font-family: 'Source Serif 4', serif;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .tip-card p { color: var(--text-secondary); font-size: 0.85rem; }
+    .tip-num {
+      font-family: 'IBM Plex Mono', monospace;
+      color: var(--gold-dim);
+      font-size: 0.7rem;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">Poker<span>Academy</span></a>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="play.html" class="btn btn-primary btn-sm">Play &amp; Practice</a>
+  </div>
+</nav>
+
+<div class="page-top"></div>
+
+<div class="container">
+
+  <section class="glossary-hero">
+    <div class="section-label">Learning Hub</div>
+    <h1>The complete poker <em>glossary</em></h1>
+    <p>Everything you need to know before sitting at a table — terms, game flow, hand rankings, and beginner tips.</p>
+  </section>
+
+  <!-- HOW TO PLAY -->
+  <section class="how-section" id="how-to-play">
+    <h2>How Texas Hold'em Works</h2>
+    <p style="color:var(--text-secondary);margin-bottom:1.25rem;">Texas Hold'em is the most popular variant of poker. Here's the flow of a single hand:</p>
+    <ol>
+      <li><strong>Blinds are posted.</strong> Two players to the left of the dealer post forced bets: the small blind and big blind. This creates a starting pot.</li>
+      <li><strong>Hole cards are dealt.</strong> Each player receives 2 private cards face-down. Only you can see these.</li>
+      <li><strong>Pre-flop betting.</strong> Starting left of the big blind, each player can fold, call, or raise.</li>
+      <li><strong>The Flop.</strong> Three community cards are dealt face-up. Another round of betting follows.</li>
+      <li><strong>The Turn.</strong> A fourth community card is revealed. Another betting round.</li>
+      <li><strong>The River.</strong> The fifth and final community card is dealt. Final betting round.</li>
+      <li><strong>Showdown.</strong> Remaining players reveal their hands. Best 5-card combination wins the pot.</li>
+    </ol>
+  </section>
+
+  <!-- GAME FLOW VISUAL -->
+  <section class="flow-section">
+    <div class="section-label">Game flow</div>
+    <h2 class="section-title">The four streets</h2>
+    <div class="flow-steps">
+      <div class="flow-step" data-step="Street 1">
+        <h4>Pre-Flop</h4>
+        <p>You have only your 2 hole cards. Decide to play or fold based on hand strength and position.</p>
+      </div>
+      <div class="flow-step" data-step="Street 2">
+        <h4>Flop</h4>
+        <p>3 community cards are revealed. See how your hand connects — pairs, draws, or nothing.</p>
+      </div>
+      <div class="flow-step" data-step="Street 3">
+        <h4>Turn</h4>
+        <p>The 4th card arrives. Pot grows, draws either hit or miss. Stakes increase.</p>
+      </div>
+      <div class="flow-step" data-step="Street 4">
+        <h4>River</h4>
+        <p>The final card. All cards are on the table. Last chance to bet, bluff, or fold.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search terms… e.g. bluff, river, pot odds">
+  </div>
+
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" data-cat="all">All Terms</button>
+    <button class="cat-tab" data-cat="basics">Basics</button>
+    <button class="cat-tab" data-cat="actions">Actions</button>
+    <button class="cat-tab" data-cat="hands">Hands</button>
+    <button class="cat-tab" data-cat="positions">Positions</button>
+    <button class="cat-tab" data-cat="strategy">Strategy</button>
+    <button class="cat-tab" data-cat="streets">Streets &amp; Cards</button>
+  </div>
+
+  <div id="termsContainer"></div>
+  <div class="no-results" id="noResults">No matching terms found. Try a different search.</div>
+
+  <!-- BEGINNER TIPS -->
+  <section style="margin-top:4rem;">
+    <div class="section-label">Beginner tips</div>
+    <h2 class="section-title">10 things to remember</h2>
+    <div class="tips-grid">
+      <div class="tip-card"><span class="tip-num">01</span><h4>Play tight early</h4><p>As a beginner, play fewer hands but play them aggressively. Fold weak hands without remorse.</p></div>
+      <div class="tip-card"><span class="tip-num">02</span><h4>Position is power</h4><p>Acting last gives you more information. Prefer playing hands when you're on the button or in late position.</p></div>
+      <div class="tip-card"><span class="tip-num">03</span><h4>Don't chase every draw</h4><p>Having four cards to a flush is exciting, but calling big bets to chase it is often a losing play.</p></div>
+      <div class="tip-card"><span class="tip-num">04</span><h4>Watch your opponents</h4><p>Even online, notice betting patterns. Who always raises? Who only bets big with strong hands?</p></div>
+      <div class="tip-card"><span class="tip-num">05</span><h4>Manage your bankroll</h4><p>Never risk money you can't afford to lose. A good rule: have 20–30 buy-ins for your stake level.</p></div>
+      <div class="tip-card"><span class="tip-num">06</span><h4>Understand pot odds</h4><p>If the pot is ₹1000 and you need to call ₹200, you're getting 5:1. Your draw should hit more than 1 in 6 times.</p></div>
+      <div class="tip-card"><span class="tip-num">07</span><h4>Fold more often</h4><p>Beginners play too many hands. It's okay to fold 70–80% of hands dealt to you.</p></div>
+      <div class="tip-card"><span class="tip-num">08</span><h4>Bet with purpose</h4><p>Every bet should have a reason: for value (you think you're ahead) or as a bluff (to make opponents fold).</p></div>
+      <div class="tip-card"><span class="tip-num">09</span><h4>Don't bluff too much</h4><p>Beginners over-bluff. Against players who call everything, bluffing is just giving away money.</p></div>
+      <div class="tip-card"><span class="tip-num">10</span><h4>Review your hands</h4><p>After playing, think about key decisions. "Would I do the same thing again?" is the best learning question.</p></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>PokerAcademy — A free learning tool. <a href="play.html">Start practicing →</a></p>
+  </div>
+</footer>
+
+<script src="nav.js"></script>
+<script>
+const TERMS = [
+  // BASICS
+  { term: "Hole Cards", cat: "basics", def: "The two private cards dealt face-down to each player at the start of a hand. Only you can see your hole cards.", example: "You're dealt A♠ K♥ as your hole cards." },
+  { term: "Community Cards", cat: "basics", def: "The five shared cards dealt face-up on the board (flop, turn, river). All players use these to make their best hand.", example: "The board shows 10♠ 7♥ 3♦ Q♣ 2♠ — those are the community cards." },
+  { term: "Pot", cat: "basics", def: "The total amount of chips/money in the middle that players are competing to win in a hand.", example: "After everyone bets, the pot is at ₹5,000." },
+  { term: "Blinds", cat: "basics", def: "Forced bets posted by two players before cards are dealt. The small blind (SB) is typically half the big blind (BB). They rotate each hand.", example: "In a ₹50/₹100 game, small blind is ₹50, big blind is ₹100." },
+  { term: "Ante", cat: "basics", def: "A small forced bet that every player at the table must pay before each hand. More common in tournaments.", example: "With a ₹10 ante and 9 players, there's ₹90 in the pot before any cards are dealt." },
+  { term: "Buy-in", cat: "basics", def: "The amount of money required to enter a poker game or tournament.", example: "The tournament has a ₹5,000 buy-in." },
+  { term: "Stack", cat: "basics", def: "The total amount of chips a player has in front of them at the table.", example: "She has a deep stack — about 200 big blinds." },
+  { term: "Showdown", cat: "basics", def: "The final phase of a hand where remaining players reveal their cards to determine the winner.", example: "Both players reached showdown — he had two pair, she had a flush." },
+  { term: "Dealer Button", cat: "basics", def: "A marker that rotates clockwise each hand to indicate the nominal dealer position. Determines the order of play.", example: "The button moves to your left after each hand." },
+  { term: "Heads-Up", cat: "basics", def: "A poker game or situation with only two players.", example: "After everyone else folded, it was heads-up between the two of them." },
+
+  // ACTIONS
+  { term: "Fold", cat: "actions", def: "To discard your hand and forfeit any chips you've put in the pot. You're out of the current hand.", example: "Your cards are weak — you fold and wait for the next hand." },
+  { term: "Call", cat: "actions", def: "To match the current bet amount to stay in the hand.", example: "The big blind is ₹100. You call by putting in ₹100." },
+  { term: "Raise", cat: "actions", def: "To increase the current bet, forcing other players to match the new amount or fold.", example: "Someone bets ₹200, you raise to ₹600." },
+  { term: "Check", cat: "actions", def: "To pass the action to the next player without betting, only possible when no one has bet in the current round.", example: "No one has bet yet on the flop, so you check." },
+  { term: "Bet", cat: "actions", def: "To be the first player to put chips into the pot during a betting round.", example: "Everyone checks to you on the turn. You bet ₹300." },
+  { term: "All-In", cat: "actions", def: "To bet all of your remaining chips. You can still win the pot up to the amount you wagered.", example: "You push your entire stack of ₹10,000 into the middle — you're all-in." },
+  { term: "Re-raise (3-Bet)", cat: "actions", def: "To raise after someone has already raised. The initial raise is a '2-bet,' a re-raise is a '3-bet,' and so on.", example: "Player A bets, Player B raises, Player C 3-bets." },
+  { term: "Limp", cat: "actions", def: "To enter the pot pre-flop by just calling the big blind, rather than raising. Generally considered a weak play.", example: "He limped in with Q-J instead of raising." },
+
+  // HANDS
+  { term: "Royal Flush", cat: "hands", def: "The best possible hand: A, K, Q, J, 10 all of the same suit. Unbeatable.", example: "A♥ K♥ Q♥ J♥ 10♥" },
+  { term: "Straight Flush", cat: "hands", def: "Five consecutive cards of the same suit. Ranked below royal flush.", example: "7♠ 8♠ 9♠ 10♠ J♠" },
+  { term: "Four of a Kind (Quads)", cat: "hands", def: "Four cards of the same rank plus any fifth card.", example: "K♠ K♥ K♦ K♣ 5♠" },
+  { term: "Full House (Boat)", cat: "hands", def: "Three of a kind combined with a pair. Named by the trips first, e.g. 'Kings full of fives.'", example: "K♠ K♥ K♦ 5♣ 5♠" },
+  { term: "Flush", cat: "hands", def: "Five cards of the same suit in any order. If two players have a flush, the one with the highest card wins.", example: "A♦ J♦ 8♦ 5♦ 3♦" },
+  { term: "Straight", cat: "hands", def: "Five consecutive cards of mixed suits. Ace can be high (A-K-Q-J-10) or low (A-2-3-4-5).", example: "4♠ 5♥ 6♦ 7♣ 8♠" },
+  { term: "Three of a Kind (Trips/Set)", cat: "hands", def: "Three cards of the same rank. Called a 'set' when you have a pocket pair and hit the third on the board; 'trips' when two are on the board.", example: "9♥ 9♣ 9♦ K♠ 4♥" },
+  { term: "Two Pair", cat: "hands", def: "Two different pairs plus a fifth card (kicker).", example: "A♠ A♥ 8♣ 8♦ 3♠" },
+  { term: "One Pair", cat: "hands", def: "Two cards of the same rank plus three unrelated cards.", example: "Q♥ Q♠ 10♣ 6♦ 2♥" },
+  { term: "High Card", cat: "hands", def: "When you haven't made any combination, your highest card plays. The weakest possible hand.", example: "A♠ J♥ 8♣ 4♦ 2♥ — 'Ace high'" },
+  { term: "Kicker", cat: "hands", def: "The highest unpaired card in your hand, used to break ties when two players have the same pair or hand.", example: "Both have a pair of Kings, but your Ace kicker beats their Queen kicker." },
+  { term: "Pocket Pair", cat: "hands", def: "When your two hole cards are a pair.", example: "You're dealt J♠ J♥ — pocket Jacks." },
+  { term: "Suited", cat: "hands", def: "When your two hole cards are of the same suit, improving your chances of making a flush.", example: "A♥ K♥ is 'Ace-King suited.'" },
+
+  // POSITIONS
+  { term: "Button (BTN)", cat: "positions", def: "The dealer position, the most advantageous seat. You act last in every post-flop betting round.", example: "On the button, you saw everyone else act before making your decision." },
+  { term: "Small Blind (SB)", cat: "positions", def: "The position immediately left of the button. Must post the small blind. Worst post-flop position (acts first).", example: "You're in the small blind and post ₹50." },
+  { term: "Big Blind (BB)", cat: "positions", def: "The position two seats left of the button. Posts the big blind. Has the option to check if no one raises pre-flop.", example: "No one raised, so you check your option in the big blind." },
+  { term: "Under the Gun (UTG)", cat: "positions", def: "The first player to act pre-flop, sitting left of the big blind. The most difficult position.", example: "UTG, you need a strong hand because everyone behind you can still raise." },
+  { term: "Cutoff (CO)", cat: "positions", def: "The seat immediately to the right of the button. Second-best position at the table.", example: "From the cutoff, you can steal the blinds if the button folds." },
+  { term: "Early Position", cat: "positions", def: "The first few seats to act. You should play tighter here because many players act after you.", example: "In early position, stick to premium hands like big pairs and AK." },
+  { term: "Late Position", cat: "positions", def: "The cutoff and button seats. You can play more hands here because you have more information.", example: "In late position, you can open with weaker hands if everyone has folded." },
+
+  // STREETS
+  { term: "Pre-Flop", cat: "streets", def: "The first betting round, after hole cards are dealt but before any community cards.", example: "Pre-flop, you look at your hole cards and decide to raise with A♠ K♠." },
+  { term: "Flop", cat: "streets", def: "The first three community cards dealt face-up at once. The most information-rich moment.", example: "The flop comes K♠ 7♥ 3♦ — you've hit top pair with your A-K." },
+  { term: "Turn", cat: "streets", def: "The fourth community card. Also called 'Fourth Street.'", example: "The turn is the Q♣. Now there are four cards on the board." },
+  { term: "River", cat: "streets", def: "The fifth and final community card. After this, one last betting round and then the showdown.", example: "The river is the 2♥. All five community cards are now revealed." },
+  { term: "Board", cat: "streets", def: "All the community cards currently face-up on the table.", example: "The board reads K♠ 7♥ 3♦ Q♣ 2♥." },
+  { term: "Burn Card", cat: "streets", def: "A card discarded from the top of the deck before each community card is dealt, to prevent cheating.", example: "The dealer burns a card, then deals the flop." },
+
+  // STRATEGY
+  { term: "Bluff", cat: "strategy", def: "Betting or raising with a weak hand to make opponents fold better hands. Fundamental but overused by beginners.", example: "You have nothing, but you bet big on the river. Your opponent folds — successful bluff." },
+  { term: "Semi-Bluff", cat: "strategy", def: "Betting with a drawing hand that's currently behind but could improve. Combines fold equity with draw equity.", example: "You bet with a flush draw — you might win now if they fold, or hit the flush later." },
+  { term: "Value Bet", cat: "strategy", def: "Betting with a strong hand to get called by a weaker hand. The goal is to extract maximum chips.", example: "You have top set and bet because you think your opponent has a pair and will call." },
+  { term: "Pot Odds", cat: "strategy", def: "The ratio of the pot size to your call amount. Helps decide if a call is mathematically profitable.", example: "Pot is ₹1,000, you call ₹250. Pot odds are 4:1 — you need to win more than 20% of the time." },
+  { term: "Implied Odds", cat: "strategy", def: "An extension of pot odds accounting for chips you expect to win on later streets if you hit your draw.", example: "Pot odds don't justify calling, but if you hit your straight, you'll get paid off big." },
+  { term: "Equity", cat: "strategy", def: "Your share of the pot based on your probability of winning. Aces pre-flop have ~80% equity against most hands.", example: "With a flush draw on the flop, you have roughly 35% equity." },
+  { term: "Expected Value (EV)", cat: "strategy", def: "The average amount you expect to win or lose on a decision over the long run. +EV plays are profitable.", example: "Calling ₹100 to win a ₹500 pot 25% of the time: (0.25×500)−(0.75×100) = +₹50." },
+  { term: "Outs", cat: "strategy", def: "The number of remaining cards that could improve your hand to a winner.", example: "Flush draw with 4 suited cards — there are 9 outs in the deck." },
+  { term: "Drawing Dead", cat: "strategy", def: "When no possible card can make your hand a winner. The worst spot to be in.", example: "You have a straight draw, but your opponent has a full house — you're drawing dead." },
+  { term: "Nuts", cat: "strategy", def: "The best possible hand given the current board. If you have the nuts, no one can beat you.", example: "Board is A♠ K♠ Q♠ 7♥ 2♦. Holding J♠ 10♠ = nut flush." },
+  { term: "Tilt", cat: "strategy", def: "An emotional state where frustration causes poor decisions. Usually after a bad beat.", example: "After losing a big hand, he went on tilt and started playing recklessly." },
+  { term: "Bad Beat", cat: "strategy", def: "Losing despite being a strong favourite, usually due to an unlikely card on the turn or river.", example: "Pocket Aces lost to a one-outer on the river — classic bad beat." },
+  { term: "Range", cat: "strategy", def: "The complete set of hands a player could have in a situation. Thinking in ranges is key to advanced play.", example: "When she raises UTG, her range is likely strong: big pairs, AK, maybe AQ." },
+  { term: "Position", cat: "strategy", def: "Where you sit relative to the dealer. Acting later is a huge advantage because you see what others do first.", example: "Playing in position lets you control the pot size and get better information." },
+  { term: "Continuation Bet (C-Bet)", cat: "strategy", def: "A bet on the flop by the pre-flop raiser, regardless of whether the flop helped. Leverages pre-flop aggression.", example: "You raised pre-flop with AK, the flop comes 7-4-2. You c-bet because you showed strength." },
+  { term: "Slow Play", cat: "strategy", def: "Checking or calling with a very strong hand to disguise it and trap opponents.", example: "You flopped a full house and checked to let your opponent catch up." },
+  { term: "Check-Raise", cat: "strategy", def: "Checking to let an opponent bet, then raising them. Powerful for value or as a bluff.", example: "You check on the flop, opponent bets, you raise — surprise!" },
+  { term: "Fold Equity", cat: "strategy", def: "The added value from the chance your opponent will fold to your bet or raise.", example: "Your semi-bluff has fold equity: even if you miss, they might fold now." },
+  { term: "Donk Bet", cat: "strategy", def: "A bet by the out-of-position player who was not the pre-flop aggressor. Often considered weak.", example: "Instead of checking to the raiser, you bet out of position — that's a donk bet." },
+  { term: "Muck", cat: "strategy", def: "To discard or not show your cards at showdown. Hides your strategy.", example: "He lost and decided to muck rather than show his bluff." },
+  { term: "Side Pot", cat: "strategy", def: "A separate pot created when a player goes all-in and others keep betting. The all-in player can only win the main pot.", example: "Player A is all-in for ₹500. B and C keep betting — extras go to a side pot." },
+];
+
+const container = document.getElementById('termsContainer');
+const searchInput = document.getElementById('searchInput');
+const catTabs = document.getElementById('catTabs');
+const noResults = document.getElementById('noResults');
+
+const CAT_LABELS = {
+  basics: 'Basics', actions: 'Actions', hands: 'Hands & Rankings',
+  positions: 'Table Positions', strategy: 'Strategy & Concepts', streets: 'Streets & Cards',
+};
+
+let activeCategory = 'all';
+
+function renderTerms(filter = '') {
+  const filtered = TERMS.filter(t => {
+    const matchCat = activeCategory === 'all' || t.cat === activeCategory;
+    const matchSearch = !filter || t.term.toLowerCase().includes(filter) || t.def.toLowerCase().includes(filter);
+    return matchCat && matchSearch;
+  });
+
+  if (!filtered.length) { container.innerHTML = ''; noResults.style.display = 'block'; return; }
+  noResults.style.display = 'none';
+
+  const groups = {};
+  filtered.forEach(t => { if (!groups[t.cat]) groups[t.cat] = []; groups[t.cat].push(t); });
+
+  const order = ['basics','actions','hands','positions','streets','strategy'];
+  let html = '';
+  order.forEach(cat => {
+    if (!groups[cat]) return;
+    html += `<section class="terms-section"><h2>${CAT_LABELS[cat]}</h2>`;
+    groups[cat].forEach(t => {
+      html += `<div class="term-card">
+        <div class="term-header">
+          <span class="term-name">${hl(t.term, filter)}</span>
+          <span class="term-tag">${cat}</span>
+        </div>
+        <p class="term-def">${hl(t.def, filter)}</p>
+        ${t.example ? `<div class="term-example">Example: ${t.example}</div>` : ''}
+      </div>`;
+    });
+    html += '</section>';
+  });
+  container.innerHTML = html;
+}
+
+function hl(text, q) {
+  if (!q) return text;
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<mark style="background:rgba(201,168,76,0.25);color:var(--text);border-radius:2px;padding:0 2px;">$1</mark>');
+}
+
+searchInput.addEventListener('input', () => renderTerms(searchInput.value.toLowerCase().trim()));
+
+catTabs.addEventListener('click', e => {
+  if (!e.target.classList.contains('cat-tab')) return;
+  catTabs.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+  activeCategory = e.target.dataset.cat;
+  renderTerms(searchInput.value.toLowerCase().trim());
+});
+
+renderTerms();
+</script>
+</body>
+</html>
